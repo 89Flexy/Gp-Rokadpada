@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GP Rokadpada</title>
 
-  <!-- Google Translate -->
+  <!-- ✅ Google Translate (MUST be in main page) -->
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -18,49 +18,38 @@
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </head>
-
 <body>
 
-<!-- Translate -->
+<!-- ✅ Translate container MUST be outside fetch -->
 <div id="google_translate_element"></div>
 
-<!-- CONTENT -->
-<!-- 👉 Yaha direct main.html ka content paste kar -->
-
-<!-- Dark Mode Button -->
-<button id="themeToggle">🌙</button>
+<!-- App content -->
+<div id="app"></div>
 
 <script>
-const toggleBtn = document.getElementById("themeToggle");
+fetch("main.html")
+.then(res => res.text())
+.then(data => {
+  const app = document.getElementById("app");
+  app.innerHTML = data;
 
-function setTheme(mode) {
-  if (mode === "dark") {
-    document.body.classList.add("dark");
-    localStorage.setItem("theme", "dark");
-  } else {
-    document.body.classList.remove("dark");
-    localStorage.setItem("theme", "light");
-  }
-}
+  // ✅ FIX 1: run inline scripts
+  app.querySelectorAll("script").forEach(oldScript => {
+    const newScript = document.createElement("script");
 
-// Load saved theme
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme) setTheme(savedTheme);
+    if (oldScript.src) {
+      // ✅ FIX 2: external scripts support
+      newScript.src = oldScript.src;
+      newScript.async = false;
+    } else {
+      newScript.textContent = oldScript.textContent;
+    }
 
-// Toggle
-toggleBtn.addEventListener("click", () => {
-  document.body.classList.contains("dark")
-    ? setTheme("light")
-    : setTheme("dark");
-});
+    document.body.appendChild(newScript);
+  });
+})
+.catch(err => console.error("Fetch error:", err));
 </script>
-
-<style>
-body.dark {
-  background: #0f172a;
-  color: white;
-}
-</style>
 
 </body>
 </html>
