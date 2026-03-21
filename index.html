@@ -1,22 +1,42 @@
-<!DOCTYPE html>  <html>  
-<head>  
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <title>GP Rokadpada</title>  
-</head>  
-<body>  <div id="app"></div>  <script>  
-fetch("main.html")  
-.then(res => res.text())  
-.then(data => {  
-  document.getElementById("app").innerHTML = data;  
-  
-  // 🔥 IMPORTANT: re-run scripts  
-  const scripts = document.querySelectorAll("#app script");  
-  scripts.forEach(oldScript => {  
-    const newScript = document.createElement("script");  
-    newScript.textContent = oldScript.textContent;  
-    document.body.appendChild(newScript);  
-  });  
-});  
-</script>  </body>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GP Rokadpada</title>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<script>
+fetch("main.html")
+.then(res => res.text())
+.then(data => {
+  const app = document.getElementById("app");
+  app.innerHTML = data;
+
+  // 🔥 FIX: run ALL scripts (inline + external)
+  const scripts = app.querySelectorAll("script");
+
+  scripts.forEach(oldScript => {
+    const newScript = document.createElement("script");
+
+    // copy attributes (IMPORTANT for external scripts)
+    [...oldScript.attributes].forEach(attr => {
+      newScript.setAttribute(attr.name, attr.value);
+    });
+
+    // inline script
+    if (oldScript.textContent) {
+      newScript.textContent = oldScript.textContent;
+    }
+
+    document.body.appendChild(newScript);
+  });
+});
+</script>
+
+</body>
 </html>
