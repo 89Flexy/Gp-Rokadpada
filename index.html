@@ -6,9 +6,21 @@
 </head>  
 <body>  
   <div id="app"></div>
-<script>
-
-  // Now run your inline scripts
+ <script>  
+fetch("main.html")  
+.then(res => res.text())  
+.then(data => {  
+  document.getElementById("app").innerHTML = data;  
+  
+  // 🔥 IMPORTANT: re-run scripts  
+  const scripts = document.querySelectorAll("#app script");  
+  scripts.forEach(oldScript => {  
+    const newScript = document.createElement("script");  
+    newScript.textContent = oldScript.textContent;  
+    document.body.appendChild(newScript);  
+  });  
+}); 
+    // Now run your inline scripts
   const darkToggle = document.getElementById("darkToggle");
   if(darkToggle){
     if(localStorage.getItem("mode") === "dark"){
@@ -26,27 +38,5 @@
       }
     });
   }
-
-  // Initialize Google Translate if needed
-  if(typeof googleTranslateElementInit === "function"){
-    googleTranslateElementInit();
-  }
-}
-
-loadPage();
-</script>  <script>  
-fetch("main.html")  
-.then(res => res.text())  
-.then(data => {  
-  document.getElementById("app").innerHTML = data;  
-  
-  // 🔥 IMPORTANT: re-run scripts  
-  const scripts = document.querySelectorAll("#app script");  
-  scripts.forEach(oldScript => {  
-    const newScript = document.createElement("script");  
-    newScript.textContent = oldScript.textContent;  
-    document.body.appendChild(newScript);  
-  });  
-});  
 </script>  </body>  
 </html>
