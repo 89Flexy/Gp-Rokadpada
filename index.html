@@ -4,109 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GP Rokadpada</title>
+  <style>
+    /* Simple demo styles */
+    body.dark { background: #222; color: #fff; }
+    #sidebar { width: 250px; background: #ccc; position: fixed; left: -250px; top: 0; bottom: 0; transition: 0.3s; }
+    #sidebar.active { left: 0; }
+    #overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); display:none; }
+    #overlay.active { display:block; }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
 
-  <script>
-  async function loadPage() {
-    const res = await fetch("main.html");
-    const html = await res.text();
+<div id="app"></div>
 
-    // Inject HTML
-    document.getElementById("app").innerHTML = html;
+<script>
+async function loadPage() {
+  const res = await fetch("main.html");
+  const html = await res.text();
 
-    // Execute inline scripts in main.html
-    const scripts = document.querySelectorAll("#app script");
-    scripts.forEach(oldScript => {
-      const newScript = document.createElement("script");
-      if(oldScript.src){
-        newScript.src = oldScript.src;
-      } else {
-        newScript.textContent = oldScript.textContent;
-      }
-      document.body.appendChild(newScript);
+  // Inject main.html
+  document.getElementById("app").innerHTML = html;
+
+  // --- MENU FUNCTIONALITY ---
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  if(menuBtn && sidebar && overlay){
+    menuBtn.addEventListener("click", ()=>{
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
     });
-
-    // Wait for menu/search elements to exist
-    function waitForElement(selector, callback) {
-      const el = document.querySelector(selector);
-      if(el) return callback(el);
-      const observer = new MutationObserver(() => {
-        const el2 = document.querySelector(selector);
-        if(el2){
-          observer.disconnect();
-          callback(el2);
-        }
-      });
-      observer.observe(document.getElementById("app"), { childList: true, subtree: true });
-    }
-
-    // ----------------------
-    // DARK MODE
-    // ----------------------
-    waitForElement("#darkToggle", darkToggle => {
-      if(localStorage.getItem("mode") === "dark"){
-        document.body.classList.add("dark");
-        darkToggle.innerText = "☀️ Light Mode";
-      }
-      darkToggle.addEventListener("click", ()=>{
-        document.body.classList.toggle("dark");
-        if(document.body.classList.contains("dark")){
-          localStorage.setItem("mode","dark");
-          darkToggle.innerText = "☀️ Light Mode";
-        } else {
-          localStorage.setItem("mode","light");
-          darkToggle.innerText = "🌙 Dark Mode";
-        }
-      });
+    overlay.addEventListener("click", ()=>{
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
     });
-
-    // ----------------------
-    // MENU TOGGLE
-    // ----------------------
-    waitForElement("#menuBtn", menuBtn => {
-      const sidebar = document.getElementById("sidebar");
-      const overlay = document.getElementById("overlay");
-      menuBtn.addEventListener("click", ()=>{
-        menuBtn.classList.toggle("active");
-        sidebar.classList.toggle("active");
-        overlay.classList.toggle("active");
-      });
-      overlay.addEventListener("click", ()=>{
-        menuBtn.classList.remove("active");
-        sidebar.classList.remove("active");
-        overlay.classList.remove("active");
-      });
-    });
-
-    // ----------------------
-    // SEARCH TOGGLE
-    // ----------------------
-    waitForElement("#searchIcon", searchIcon => {
-      const topSearch = document.getElementById("topSearch");
-      const closeSearch = document.getElementById("closeSearch");
-      searchIcon.addEventListener("click", ()=> topSearch.classList.add("active"));
-      closeSearch.addEventListener("click", ()=> topSearch.classList.remove("active"));
-    });
-
-    // ----------------------
-    // GOOGLE TRANSLATE
-    // ----------------------
-    if(!window.googleTranslateElementInit){
-      window.googleTranslateElementInit = function(){
-        new google.translate.TranslateElement({pageLanguage:'mr'}, 'google_translate_element');
-      };
-      const gtScript = document.createElement("script");
-      gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-      document.body.appendChild(gtScript);
-    } else {
-      googleTranslateElementInit();
-    }
-
   }
 
-  loadPage();
-  </script>
+  // --- SEARCH FUNCTIONALITY ---
+  const searchIcon = document.getElementById("searchIcon");
+  const topSearch = document.getElementById("topSearch");
+  const closeSearch = document.getElementById("closeSearch");
+  if(searchIcon && topSearch && closeSearch){
+    searchIcon.addEventListener("click", ()=> topSearch.classList.add("active"));
+    closeSearch.addEventListener("click", ()=> topSearch.classList.remove("active"));
+  }
+
+  // --- DARK MODE ---
+  const darkToggle = document.getElementById("darkToggle");
+  if(darkToggle){
+    if(localStorage.getItem("mode") === "dark"){
+      document.body.classList.add("dark");
+      darkToggle.innerText = "☀️ Light Mode";
+    }
+    darkToggle.addEventListener("click", ()=>{
+      document.body.classList.toggle("dark");
+      if(document.body.classList.contains("dark")){
+        localStorage.setItem("mode","dark");
+        darkToggle.innerText = "☀️ Light Mode";
+      } else {
+        localStorage.setItem("mode","light");
+        darkToggle.innerText = "🌙 Dark Mode";
+      }
+    });
+  }
+
+  // --- GOOGLE TRANSLATE ---
+  if(!window.googleTranslateElementInit){
+    window.googleTranslateElementInit = function(){
+      new google.translate.TranslateElement({pageLanguage:'mr'}, 'google_translate_element');
+    };
+    const gtScript = document.createElement("script");
+    gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.body.appendChild(gtScript);
+  } else {
+    googleTranslateElementInit();
+  }
+}
+
+loadPage();
+</script>
+
 </body>
 </html>
