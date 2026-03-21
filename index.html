@@ -1,31 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Loading...</title>
-
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-
-    body{
-      overflow:hidden;
-    }
-
-    iframe{
-      width:100%;
-      height:100vh;
-      border:none;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GP Rokadpada</title>
 </head>
 <body>
 
-  <!-- FULL WEBSITE LOAD -->
-  <iframe src="main.html"></iframe>
+<div id="app"></div>
+
+<script>
+fetch("main.html")
+.then(res => res.text())
+.then(data => {
+  document.getElementById("app").innerHTML = data;
+});
+</script>
 
 </body>
 </html>
