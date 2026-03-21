@@ -14,6 +14,14 @@ fetch("main.html")
 .then(res => res.text())
 .then(data => {
   document.getElementById("app").innerHTML = data;
+
+  // 🔥 IMPORTANT: re-run scripts
+  const scripts = document.querySelectorAll("#app script");
+  scripts.forEach(oldScript => {
+    const newScript = document.createElement("script");
+    newScript.textContent = oldScript.textContent;
+    document.body.appendChild(newScript);
+  });
 });
 </script>
 
