@@ -1,29 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="mr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GP Rokadpada</title>
+
+  <!-- Google Translate -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'mr',
+        includedLanguages: 'en,hi,mr'
+      }, 'google_translate_element');
+    }
+  </script>
+
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </head>
+
 <body>
 
-<div id="app"></div>
+<!-- Translate -->
+<div id="google_translate_element"></div>
+
+<!-- CONTENT -->
+<!-- 👉 Yaha direct main.html ka content paste kar -->
+
+<!-- Dark Mode Button -->
+<button id="themeToggle">🌙</button>
 
 <script>
-fetch("main.html")
-.then(res => res.text())
-.then(data => {
-  document.getElementById("app").innerHTML = data;
+const toggleBtn = document.getElementById("themeToggle");
 
-  // 🔥 IMPORTANT: re-run scripts
-  const scripts = document.querySelectorAll("#app script");
-  scripts.forEach(oldScript => {
-    const newScript = document.createElement("script");
-    newScript.textContent = oldScript.textContent;
-    document.body.appendChild(newScript);
-  });
+function setTheme(mode) {
+  if (mode === "dark") {
+    document.body.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.body.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) setTheme(savedTheme);
+
+// Toggle
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.contains("dark")
+    ? setTheme("light")
+    : setTheme("dark");
 });
 </script>
+
+<style>
+body.dark {
+  background: #0f172a;
+  color: white;
+}
+</style>
 
 </body>
 </html>
