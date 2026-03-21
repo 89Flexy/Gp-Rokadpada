@@ -584,6 +584,27 @@ body.dark .top-title .sub{
   height:0;
   overflow:hidden;
 }
+  /* 🔥 GOOGLE TRANSLATE TOP BAR HIDE */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+  /* GOOGLE LOGO & TEXT HIDE */
+.goog-logo-link {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  font-size: 0px !important;
+}
+
+/* REMOVE EXTRA SPACE */
+.goog-te-banner-frame {
+  display: none !important;
+}
 </style>
 
 
@@ -678,7 +699,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
 <!-- DARK MODE BUTTON -->
 <button id="darkToggle">🌙 Dark Mode</button>
-
+<script>
+setInterval(() => {
+  if (document.body.style.top !== "0px") {
+    document.body.style.top = "0px";
+  }
+}, 100);
+</script>
 <!-- LANGUAGE SWITCH BELOW SLIDER -->  
 <div id="google_translate_element"></div>
 <div class="slider-language">
