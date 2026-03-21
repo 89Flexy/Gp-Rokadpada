@@ -57,38 +57,5 @@ fetch("main.html")
 </script>
   
 
-<script>
-const slides = document.querySelectorAll('.slide');
-const nextBtn = document.getElementById('next');
-const prevBtn = document.getElementById('prev');
-let current = 0;
-
-// Show the current slide
-function showSlide(index) {
-  slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
-}
-
-// Next slide
-function nextSlide() {
-  current = (current + 1) % slides.length;
-  showSlide(current);
-}
-
-// Previous slide
-function prevSlide() {
-  current = (current - 1 + slides.length) % slides.length;
-  showSlide(current);
-}
-
-// Button event listeners
-nextBtn.addEventListener('click', nextSlide);
-prevBtn.addEventListener('click', prevSlide);
-
-// Auto-slide every 3 seconds
-setInterval(nextSlide, 3000);
-
-// Initialize
-showSlide(current);
-</script>
 </body>
 </html>
