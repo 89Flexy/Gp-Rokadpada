@@ -10,6 +10,48 @@
 
 <div id="app"></div>
 <script>
+  function initMenuSearchTranslate() {
+  // MENU
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  if(menuBtn && sidebar && overlay){
+    menuBtn.addEventListener("click", ()=>{
+      menuBtn.classList.toggle("active");
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    });
+    overlay.addEventListener("click", ()=>{
+      menuBtn.classList.remove("active");
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+  }
+
+  // SEARCH
+  const searchIcon = document.getElementById("searchIcon");
+  const topSearch = document.getElementById("topSearch");
+  const closeSearch = document.getElementById("closeSearch");
+  if(searchIcon && topSearch && closeSearch){
+    searchIcon.addEventListener("click", ()=>topSearch.classList.add("active"));
+    closeSearch.addEventListener("click", ()=>topSearch.classList.remove("active"));
+  }
+
+  // GOOGLE TRANSLATE
+  if(typeof googleTranslateElementInit === "function"){
+    googleTranslateElementInit();
+  }else{
+    window.googleTranslateElementInit = function(){
+      new google.translate.TranslateElement({pageLanguage:'mr'}, 'google_translate_element');
+    }
+    const s = document.createElement("script");
+    s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.body.appendChild(s);
+  }
+}
+
+// call after inserting html
+initMenuSearchTranslate();
 async function loadPage() {
   const res = await fetch("main.html");
   let html = await res.text();
