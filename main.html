@@ -994,32 +994,92 @@ function changeLang(lang) {
   </div>
 
   <div class="info-text" id="galleryBox">
-
     <div class="gp-gallery" id="gpGallery">
-      <button class="gp-btn gp-prev">&#10094;</button>
-
       <div class="gp-track">
-      <img src="https://drive.google.com/thumbnail?id=1OEyLXfgLb_h0Ks0gv6yaK9QhZ9tzSWrf&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=1n95Qy4BPz2jYwBdnMoBtJeI6ButSgAGE&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=12mKxvTfterO58opjFI_lAcfRyyWkfCZD&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=1dhhGS4ojfNRbtBperTArUka0Hyw4H0t1&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=1Zl7Akg0QIT-6c27kQQEXGGni913HZhq-&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=1pljiS2zqVlABVBtlwKA5Rh4ead0Rxezg&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=1sjwdUXAJDbrsvjzeMQyQvBr7JXLOAgzR&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=1kDpNFaYFZdnOsvR5TDY6yCeifbo2KGDK&sz=w2000">
-<img src="https://drive.google.com/thumbnail?id=1R3hOcckSO0l7tOQoTlWCPIvB9G4FA6aT&sz=w2000">
+        <img src="https://drive.google.com/thumbnail?id=1OEyLXfgLb_h0Ks0gv6yaK9QhZ9tzSWrf&sz=w2000">
+        <img src="https://drive.google.com/thumbnail?id=1n95Qy4BPz2jYwBdnMoBtJeI6ButSgAGE&sz=w2000">
+       
       </div>
-
-      <button class="gp-btn gp-next">&#10095;</button>
     </div>
 
-    <!-- 🔥 VIEW MORE BUTTON -->
     <div class="gallery-btn-wrap">
       <a href="gallery.html" class="view-more-btn">View More</a>
     </div>
-<br>
+    <br>
+    <br>
   </div>
 </div>
+
+<style>
+/* Gallery container */
+.info-bar {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+/* Title bar */
+.info-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.toggle-btn { cursor: pointer; font-weight: bold; font-size: 1.2rem; }
+
+/* Gallery grid */
+.gp-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* 16:9 images */
+.gp-track img {
+  width: calc(33.333% - 8px); /* 3 per row desktop */
+  aspect-ratio: 16/9; /* maintain 16:9 ratio */
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.gp-track img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media (max-width: 900px) { .gp-track img { width: calc(50% - 8px); } }
+@media (max-width: 600px) { .gp-track img { width: calc(100% - 8px); } }
+
+/* Premium View More button */
+.gallery-btn-wrap { text-align: center; margin-top: 15px; }
+
+.view-more-btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 10px 25px;
+  background: rgba(0, 123, 255, 0.8); /* translucent blue */
+  color: #fff;
+  border-radius: 20px; /* more rounded */
+  font-weight: 600;
+  font-size: 1rem;
+  backdrop-filter: blur(6px); /* glass effect */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25); /* soft shadow */
+  transition: all 0.3s ease;
+}
+
+.view-more-btn:hover {
+  background: rgba(0, 123, 255, 1); /* solid on hover */
+  transform: translateY(-3px) scale(1.05); /* lift + subtle scale */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* stronger shadow */
+}
+</style>
 
   </div>
 <div class="important-links-slider">
@@ -1092,52 +1152,7 @@ animate();
 </script>
 
 <style>
-    .gp-gallery{
-  position:relative;
-  max-width:1000px;
-  margin:15px auto;
-  overflow:hidden;
-  border-radius:12px;
-  box-shadow:0 6px 18px rgba(0,0,0,.2);
-
-  /* 16:9 ratio */
-  aspect-ratio:16/9;
-}
-
-.gp-track{
-  display:flex;
-  width:100%;
-  height:100%;
-  transition:transform .6s ease;
-}
-
-.gp-track img{
-  width:100%;
-  height:100%;
-  flex-shrink:0;
-  object-fit:cover;
-}
-
-.gp-btn{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(0,0,0,.55);
-  color:#fff;
-  border:none;
-  font-size:22px;
-  padding:8px 14px;
-  cursor:pointer;
-  border-radius:50%;
-  z-index:5;
-}
-
-.gp-prev{ left:12px; }
-.gp-next{ right:12px; }
-
-.gp-btn:hover{
-  background:#ff6600;
-}
+    
 /* =========================
    SOCIAL ICONS (FIXED 🔥)
 ========================= */
@@ -1196,35 +1211,7 @@ animate();
   color:#fff;
 }
 </style>
- <script>
-document.addEventListener("DOMContentLoaded", () => {
 
-  const gallery = document.getElementById("gpGallery");
-  if (!gallery) return;
-
-  const track = gallery.querySelector(".gp-track");
-  const slides = gallery.querySelectorAll(".gp-track img");
-  const prevBtn = gallery.querySelector(".gp-prev");
-  const nextBtn = gallery.querySelector(".gp-next");
-
-  let index = 0;
-
-  function showSlide(i) {
-    track.style.transform = `translateX(-${i * 100}%)`;
-  }
-
-  nextBtn.addEventListener("click", () => {
-    index = (index + 1) % slides.length;
-    showSlide(index);
-  });
-
-  prevBtn.addEventListener("click", () => {
-    index = (index - 1 + slides.length) % slides.length;
-    showSlide(index);
-  });
-
-});
-</script> 
 <br>  
 <br>  
 
