@@ -1113,71 +1113,109 @@ function changeLang(lang) {
   border-radius:50%;
   z-index:5;
 }
+<!-- PHOTO GALLERY -->
+<div class="info-bar" id="photoGallery">
+  <div class="info-title">
+    <span data-en="Photo Gallery" data-mr="फोटो गॅलरी">
+      <i class="fa-solid fa-images" style="margin-right:6px;color:#000;"></i>
+      फोटो गॅलरी
+    </span>
+    <span class="toggle-btn" onclick="toggleInfo('galleryBox', this)">−</span>
+  </div>
 
-.gp-prev{ left:12px; }
-.gp-next{ right:12px; }
+  <div class="info-text" id="galleryBox">
 
-.gp-btn:hover{
-  background:#ff6600;
+    <div class="gp-gallery" id="gpGallery">
+      <button class="gp-btn gp-prev">&#10094;</button>
+
+      <div class="gp-track">
+        <img src="https://picsum.photos/1280/720?1" alt="">
+        <img src="https://picsum.photos/1280/720?2" alt="">
+        <img src="https://picsum.photos/1280/720?3" alt="">
+        <img src="https://picsum.photos/1280/720?4" alt="">
+      </div>
+
+      <button class="gp-btn gp-next">&#10095;</button>
+    </div>
+
+    <!-- 🔥 VIEW MORE BUTTON -->
+    <div class="gallery-btn-wrap">
+      <a href="gallery.html" class="view-more-btn">View More</a>
+    </div>
+<br>
+  </div>
+</div>
+
+  </div>
+<div class="important-links-slider">
+  <div class="important-links-track" id="iconTrack">
+
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/23cgSpgc/logo-68037a5da60496-94638573.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/FbSBcq8Z/logo-68037928202a06-85547777.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/9mrSR4G5/logo-6803795f485741-44653380.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/qFRPt71d/logo-68037963e47053-44347447.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/spLbKk75/logo-68037947459095-89171967.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/wZYc3XNS/logo-68037941f078d7-20118725.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/tMF0VZNR/logo-6803796888ef63-48948834.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/DDFp2cN8/logo-6803794d10e069-92720268.png"></a>
+    <a href="#" class="icon-item"><img src="https://i.ibb.co/7NYSYsYQ/logo-680379747af206-78587922.png"></a>
+
+  </div>
+</div>
+<style>
+.important-links-slider{
+  overflow:hidden;
+  width:100%;
+  padding:20px 0;
 }
-/* =========================
-   SOCIAL ICONS (FIXED 🔥)
-========================= */
-.social-icons{
-  margin-top:15px;
+
+.important-links-track{
   display:flex;
-  gap:12px;
+  gap:20px;
+  transition:transform 0.5s linear;
 }
 
-.social-icons a{
-  width:42px;
-  height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.icon-item img{
+  width:65px;
+  height:65px;
   border-radius:50%;
-  
-  /* GLASS */
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(8px);
-  border:1px solid rgba(255,255,255,0.15);
-
-  color:#fff;
-  font-size:16px;
-
-  /* 🔥 REMOVE LINE */
-  text-decoration:none !important;
-  border-bottom:none !important;
-
-  transition:0.3s;
-}
-
-/* Hover Effect */
-.social-icons a:hover{
-  transform: translateY(-5px) scale(1.1);
-  background: linear-gradient(135deg,#00f2fe,#4facfe);
-  color:#000;
-  box-shadow:0 0 15px rgba(0,242,254,0.6);
-}
-
-/* Platform Colors */
-.social-icons a:nth-child(1):hover{
-  background:#1877f2;
-  color:#fff;
-}
-.social-icons a:nth-child(2):hover{
-  background:#1da1f2;
-  color:#fff;
-}
-.social-icons a:nth-child(3):hover{
-  background:#e4405f;
-  color:#fff;
-}
-.social-icons a:nth-child(4):hover{
-  background:#ff0000;
-  color:#fff;
+  object-fit:cover;
+  box-shadow:0 6px 15px rgba(0,0,0,0.15);
 }
 </style>
+<script>
+const track = document.getElementById("iconTrack");
+
+track.innerHTML += track.innerHTML;
+
+let position = 0;
+let speed = 0.5;
+
+function animate(){
+  position -= speed;
+
+  const halfWidth = track.scrollWidth / 2;
+
+  // 🔥 fade start near end
+  if(position <= -halfWidth + 150){
+    track.style.opacity = (halfWidth + position) / 150;
+  } else {
+    track.style.opacity = 1;
+  }
+
+  // 🔥 reset clean
+  if(position <= -halfWidth){
+    position = 0;
+    track.style.opacity = 1;
+  }
+
+  track.style.transform = `translateX(${position}px)`;
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
  <script>
 document.addEventListener("DOMContentLoaded", () => {
 
