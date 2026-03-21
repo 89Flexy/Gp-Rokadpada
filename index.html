@@ -18,9 +18,7 @@ fetch("main.html")
     const newScript = document.createElement("script");  
     newScript.textContent = oldScript.textContent;  
     document.body.appendChild(newScript);  
-  });  
-}); 
-    // Now run your inline scripts
+      // Now run your inline scripts
   const darkToggle = document.getElementById("darkToggle");
   if(darkToggle){
     if(localStorage.getItem("mode") === "dark"){
@@ -36,7 +34,8 @@ fetch("main.html")
         localStorage.setItem("mode","light");
         darkToggle.innerText = "🌙 Dark Mode";
       }
-    });
+  });  
+}); 
   }
 </script>  </body>  
 </html>
