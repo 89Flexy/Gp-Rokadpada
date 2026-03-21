@@ -584,26 +584,17 @@ body.dark .top-title .sub{
   height:0;
   overflow:hidden;
 }
-  /* 🔥 GOOGLE TRANSLATE TOP BAR HIDE */
+/* 🔥 GOOGLE TOP BAR FORCE HIDE */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
 .goog-te-banner-frame.skiptranslate {
   display: none !important;
 }
 
 body {
   top: 0px !important;
-}
-  /* GOOGLE LOGO & TEXT HIDE */
-.goog-logo-link {
-  display: none !important;
-}
-
-.goog-te-gadget {
-  font-size: 0px !important;
-}
-
-/* REMOVE EXTRA SPACE */
-.goog-te-banner-frame {
-  display: none !important;
 }
 </style>
 
@@ -1607,6 +1598,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+  <script>
+function hideGoogleBar(){
+  const frame = document.querySelector('.goog-te-banner-frame');
+  if(frame){
+    frame.style.display = 'none';
+  }
+  document.body.style.top = "0px";
+}
+
+/* run again & again (Google bar reload hota hai) */
+setInterval(hideGoogleBar, 500);
+  </script>
 </body>  
 </html>  
 
