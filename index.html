@@ -1,22 +1,35 @@
-<!DOCTYPE html>  <html>  
-<head>  
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <title>GP Rokadpada</title>  
-</head>  
-<body>  <div id="app"></div>  <script>  
-fetch("main.html")  
-.then(res => res.text())  
-.then(data => {  
-  document.getElementById("app").innerHTML = data;  
-  
-  // 🔥 IMPORTANT: re-run scripts  
-  const scripts = document.querySelectorAll("#app script");  
-  scripts.forEach(oldScript => {  
-    const newScript = document.createElement("script");  
-    newScript.textContent = oldScript.textContent;  
-    document.body.appendChild(newScript);  
-  });  
-});  
-</script>  </body>  
-</html> 
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GP Rokadpada</title>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+  // Fetch main.html and insert into #app
+  fetch("main.html")
+    .then(res => res.text())
+    .then(data => {
+      const app = document.getElementById("app");
+      app.innerHTML = data;
+
+      // 🔥 Re-run scripts inside #app
+      const scripts = app.querySelectorAll("script");
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement("script");
+        if(oldScript.src){
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+        document.body.appendChild(newScript);
+        oldScript.remove(); // optional: remove old script
+      });
+    })
+    .catch(err => console.error("Error loading main.html:", err));
+  </script>
+</body>
+</html>
