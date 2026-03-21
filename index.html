@@ -4,26 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
   <title>GP Rokadpada</title>  
 </head>  
-<body>  <div id="app"></div>
+<body>  
+  <div id="app"></div>
 <script>
-async function loadPage() {
-  const res = await fetch("main.html");
-  let html = await res.text();
-
-  // Remove <html>, <head>, <body> tags if present
-  html = html.replace(/<script src="[^"]+"><\/script>/g, ''); // remove external scripts temporarily
-  document.getElementById("app").innerHTML = html;
-
-  // Re-insert external scripts
-  const extScripts = [
-    "//translate.google.com/translate_a/element.js"
-  ];
-  extScripts.forEach(src => {
-    const s = document.createElement("script");
-    s.src = src;
-    s.async = true;
-    document.body.appendChild(s);
-  });
 
   // Now run your inline scripts
   const darkToggle = document.getElementById("darkToggle");
