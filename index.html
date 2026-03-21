@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GP Rokadpada</title>
 
-  <!-- ✅ Smooth Dark Mode -->
+  <!-- 🌙 Dark Mode CSS -->
   <style>
     body {
       margin: 0;
-      transition: background 0.3s ease, color 0.3s ease;
       font-family: sans-serif;
+      transition: background 0.3s, color 0.3s;
     }
 
     body.dark {
@@ -18,7 +18,6 @@
       color: white;
     }
 
-    /* Optional button styling */
     #themeToggle {
       position: fixed;
       top: 15px;
@@ -27,18 +26,11 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      background: #111;
-      color: #fff;
       z-index: 9999;
-    }
-
-    body.dark #themeToggle {
-      background: #fff;
-      color: #000;
     }
   </style>
 
-  <!-- ✅ Google Translate INIT -->
+  <!-- 🌐 Google Translate -->
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -48,7 +40,6 @@
     }
   </script>
 
-  <!-- ✅ Google Translate Script -->
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </head>
@@ -60,62 +51,39 @@
 <!-- 🌙 Dark Mode Button -->
 <button id="themeToggle">🌙</button>
 
-<!-- 📦 App Content -->
-<div id="app"></div>
+<!-- 📄 👉 Yaha apna main.html ka FULL content paste kar -->
+<div>
+  <h1>Welcome to GP Rokadpada</h1>
+  <p>Yaha apna pura content daal</p>
+</div>
 
+<!-- 🔥 Dark Mode Script -->
 <script>
-fetch("main.html")
-.then(res => res.text())
-.then(data => {
-  const app = document.getElementById("app");
-  app.innerHTML = data;
+const toggleBtn = document.getElementById("themeToggle");
 
-  // ✅ Run scripts inside main.html
-  app.querySelectorAll("script").forEach(oldScript => {
-    const newScript = document.createElement("script");
-
-    if (oldScript.src) {
-      newScript.src = oldScript.src;
-      newScript.async = false;
-    } else {
-      newScript.textContent = oldScript.textContent;
-    }
-
-    document.body.appendChild(newScript);
-  });
-
-  // 🔥 DARK MODE LOGIC
-
-  const toggleBtn = document.getElementById("themeToggle");
-
-  function setTheme(mode) {
-    if (mode === "dark") {
-      document.body.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      toggleBtn.textContent = "☀️";
-    } else {
-      document.body.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-      toggleBtn.textContent = "🌙";
-    }
+function setTheme(mode) {
+  if (mode === "dark") {
+    document.body.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+    toggleBtn.textContent = "☀️";
+  } else {
+    document.body.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+    toggleBtn.textContent = "🌙";
   }
+}
 
-  // ✅ Load saved theme
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) {
-    setTheme(savedTheme);
-  }
+// Load saved theme
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) setTheme(savedTheme);
 
-  // ✅ Toggle click
-  toggleBtn.addEventListener("click", () => {
-    document.body.classList.contains("dark")
-      ? setTheme("light")
-      : setTheme("dark");
-  });
-
-})
-.catch(err => console.error("Fetch error:", err));
+// Toggle click
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.contains("dark")
+    ? setTheme("light")
+    : setTheme("dark");
+});
 </script>
 
 </body>
-</html>
+</html>    
