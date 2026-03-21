@@ -55,25 +55,7 @@ fetch("main.html")
     }
   });
 </script>
-  <div class="gallery">
-  <button id="prev">&#10094;</button>
-  <div class="slides">
-    <img src="https://drive.google.com/uc?export=view&id=1OEyLXfgLb_h0Ks0gv6yaK9QhZ9tzSWrf" class="slide active">
-    <img src="https://drive.google.com/uc?export=view&id=1n95Qy4BPz2jYwBdn..." class="slide">
-    <!-- add more images -->
-  </div>
-  <button id="next">&#10095;</button>
-</div>
-
-<style>
-.gallery { position: relative; width: 80%; margin: auto; overflow: hidden; }
-.slides { display: flex; transition: transform 0.5s ease; }
-.slide { min-width: 100%; display: none; }
-.slide.active { display: block; }
-button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: #fff; border: none; font-size: 2rem; cursor: pointer; padding: 0.5rem; }
-#prev { left: 10px; }
-#next { right: 10px; }
-</style>
+  
 
 <script>
 const slides = document.querySelectorAll('.slide');
