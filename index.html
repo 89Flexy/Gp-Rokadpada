@@ -5,7 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GP Rokadpada</title>
 
-  <!-- ✅ Google Translate (MUST be in main page) -->
+  <!-- ✅ Smooth Dark Mode -->
+  <style>
+    body {
+      margin: 0;
+      transition: background 0.3s ease, color 0.3s ease;
+      font-family: sans-serif;
+    }
+
+    body.dark {
+      background: #0f172a;
+      color: white;
+    }
+
+    /* Optional button styling */
+    #themeToggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #111;
+      color: #fff;
+      z-index: 9999;
+    }
+
+    body.dark #themeToggle {
+      background: #fff;
+      color: #000;
+    }
+  </style>
+
+  <!-- ✅ Google Translate INIT -->
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -15,15 +48,19 @@
     }
   </script>
 
+  <!-- ✅ Google Translate Script -->
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </head>
 <body>
 
-<!-- ✅ Translate container MUST be outside fetch -->
-<div id="google_translate_element"></div>
+<!-- 🌐 Translate -->
+<div id="google_translate_element" style="position:fixed; top:15px; left:15px; z-index:9999;"></div>
 
-<!-- App content -->
+<!-- 🌙 Dark Mode Button -->
+<button id="themeToggle">🌙</button>
+
+<!-- 📦 App Content -->
 <div id="app"></div>
 
 <script>
@@ -33,12 +70,11 @@ fetch("main.html")
   const app = document.getElementById("app");
   app.innerHTML = data;
 
-  // ✅ FIX 1: run inline scripts
+  // ✅ Run scripts inside main.html
   app.querySelectorAll("script").forEach(oldScript => {
     const newScript = document.createElement("script");
 
     if (oldScript.src) {
-      // ✅ FIX 2: external scripts support
       newScript.src = oldScript.src;
       newScript.async = false;
     } else {
@@ -47,6 +83,36 @@ fetch("main.html")
 
     document.body.appendChild(newScript);
   });
+
+  // 🔥 DARK MODE LOGIC
+
+  const toggleBtn = document.getElementById("themeToggle");
+
+  function setTheme(mode) {
+    if (mode === "dark") {
+      document.body.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      toggleBtn.textContent = "☀️";
+    } else {
+      document.body.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      toggleBtn.textContent = "🌙";
+    }
+  }
+
+  // ✅ Load saved theme
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    setTheme(savedTheme);
+  }
+
+  // ✅ Toggle click
+  toggleBtn.addEventListener("click", () => {
+    document.body.classList.contains("dark")
+      ? setTheme("light")
+      : setTheme("dark");
+  });
+
 })
 .catch(err => console.error("Fetch error:", err));
 </script>
