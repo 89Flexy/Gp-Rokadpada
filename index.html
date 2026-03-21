@@ -1,112 +1,22 @@
-<!DOCTYPE html>
-<html lang="mr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GP Rokadpada</title>
-
-  <!-- 🌙 CSS -->
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.dark {
-      background: #0f172a;
-      color: #fff;
-    }
-
-    #themeToggle {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      z-index: 9999;
-    }
-  </style>
-
-  <!-- 🌐 Google Translate -->
-  <script>
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'mr',
-        includedLanguages: 'en,hi,mr'
-      }, 'google_translate_element');
-    }
-  </script>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-</head>
-<body>
-
-<!-- 🌐 Translate -->
-<div id="google_translate_element" style="position:fixed; top:15px; left:15px; z-index:9999;"></div>
-
-<!-- 🌙 Button -->
-<button id="themeToggle">🌙</button>
-
-<!-- 📦 Content -->
-<div id="app"></div>
-
-<script>
-async function loadApp() {
-  const res = await fetch("main.html");
-  const html = await res.text();
-
-  const app = document.getElementById("app");
-  app.innerHTML = html;
-
-  // 🔥 WAIT for DOM update
-  setTimeout(() => {
-
-    // ✅ Re-run scripts properly
-    app.querySelectorAll("script").forEach(oldScript => {
-      const s = document.createElement("script");
-      if (oldScript.src) {
-        s.src = oldScript.src;
-      } else {
-        s.textContent = oldScript.textContent;
-      }
-      document.body.appendChild(s);
-    });
-
-    // 🔥 DARK MODE FIX (after content load)
-    const btn = document.getElementById("themeToggle");
-
-    function setTheme(mode) {
-      if (mode === "dark") {
-        document.body.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-        btn.textContent = "☀️";
-      } else {
-        document.body.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-        btn.textContent = "🌙";
-      }
-    }
-
-    // load saved
-    const saved = localStorage.getItem("theme");
-    if (saved) setTheme(saved);
-
-    // click
-    btn.onclick = () => {
-      document.body.classList.contains("dark")
-        ? setTheme("light")
-        : setTheme("dark");
-    };
-
-  }, 100); // 💥 important delay
-
-}
-
-loadApp();
-</script>
-
-</body>
+<!DOCTYPE html>  <html>  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>GP Rokadpada</title>  
+</head>  
+<body>  <div id="app"></div>  <script>  
+fetch("main.html")  
+.then(res => res.text())  
+.then(data => {  
+  document.getElementById("app").innerHTML = data;  
+  
+  // 🔥 IMPORTANT: re-run scripts  
+  const scripts = document.querySelectorAll("#app script");  
+  scripts.forEach(oldScript => {  
+    const newScript = document.createElement("script");  
+    newScript.textContent = oldScript.textContent;  
+    document.body.appendChild(newScript);  
+  });  
+});  
+</script>  </body>  
 </html>
