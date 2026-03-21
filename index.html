@@ -21,18 +21,31 @@
     scripts.forEach(oldScript => {
       const newScript = document.createElement("script");
       if(oldScript.src){
-        newScript.src = oldScript.src; // external script
+        newScript.src = oldScript.src;
       } else {
-        newScript.textContent = oldScript.textContent; // inline script
+        newScript.textContent = oldScript.textContent;
       }
       document.body.appendChild(newScript);
     });
 
+    // Wait for menu/search elements to exist
+    function waitForElement(selector, callback) {
+      const el = document.querySelector(selector);
+      if(el) return callback(el);
+      const observer = new MutationObserver(() => {
+        const el2 = document.querySelector(selector);
+        if(el2){
+          observer.disconnect();
+          callback(el2);
+        }
+      });
+      observer.observe(document.getElementById("app"), { childList: true, subtree: true });
+    }
+
     // ----------------------
-    // DARK MODE TOGGLE
+    // DARK MODE
     // ----------------------
-    const darkToggle = document.getElementById("darkToggle");
-    if(darkToggle){
+    waitForElement("#darkToggle", darkToggle => {
       if(localStorage.getItem("mode") === "dark"){
         document.body.classList.add("dark");
         darkToggle.innerText = "☀️ Light Mode";
@@ -47,15 +60,14 @@
           darkToggle.innerText = "🌙 Dark Mode";
         }
       });
-    }
+    });
 
     // ----------------------
     // MENU TOGGLE
     // ----------------------
-    const menuBtn = document.getElementById("menuBtn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
-    if(menuBtn && sidebar && overlay){
+    waitForElement("#menuBtn", menuBtn => {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
       menuBtn.addEventListener("click", ()=>{
         menuBtn.classList.toggle("active");
         sidebar.classList.toggle("active");
@@ -66,18 +78,17 @@
         sidebar.classList.remove("active");
         overlay.classList.remove("active");
       });
-    }
+    });
 
     // ----------------------
     // SEARCH TOGGLE
     // ----------------------
-    const searchIcon = document.getElementById("searchIcon");
-    const topSearch = document.getElementById("topSearch");
-    const closeSearch = document.getElementById("closeSearch");
-    if(searchIcon && topSearch && closeSearch){
+    waitForElement("#searchIcon", searchIcon => {
+      const topSearch = document.getElementById("topSearch");
+      const closeSearch = document.getElementById("closeSearch");
       searchIcon.addEventListener("click", ()=> topSearch.classList.add("active"));
       closeSearch.addEventListener("click", ()=> topSearch.classList.remove("active"));
-    }
+    });
 
     // ----------------------
     // GOOGLE TRANSLATE
@@ -92,6 +103,7 @@
     } else {
       googleTranslateElementInit();
     }
+
   }
 
   loadPage();
