@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GP Rokadpada</title>
 
-  <!-- 🌙 Dark Mode CSS -->
+  <!-- 🌙 CSS -->
   <style>
     body {
       margin: 0;
@@ -15,7 +15,7 @@
 
     body.dark {
       background: #0f172a;
-      color: white;
+      color: #fff;
     }
 
     #themeToggle {
@@ -23,8 +23,8 @@
       top: 15px;
       right: 15px;
       padding: 8px 12px;
-      border: none;
       border-radius: 8px;
+      border: none;
       cursor: pointer;
       z-index: 9999;
     }
@@ -39,7 +39,6 @@
       }, 'google_translate_element');
     }
   </script>
-
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </head>
@@ -48,42 +47,66 @@
 <!-- 🌐 Translate -->
 <div id="google_translate_element" style="position:fixed; top:15px; left:15px; z-index:9999;"></div>
 
-<!-- 🌙 Dark Mode Button -->
+<!-- 🌙 Button -->
 <button id="themeToggle">🌙</button>
 
-<!-- 📄 👉 Yaha apna main.html ka FULL content paste kar -->
-<div>
-  <h1>Welcome to GP Rokadpada</h1>
-  <p>Yaha apna pura content daal</p>
-</div>
+<!-- 📦 Content -->
+<div id="app"></div>
 
-<!-- 🔥 Dark Mode Script -->
 <script>
-const toggleBtn = document.getElementById("themeToggle");
+async function loadApp() {
+  const res = await fetch("main.html");
+  const html = await res.text();
 
-function setTheme(mode) {
-  if (mode === "dark") {
-    document.body.classList.add("dark");
-    localStorage.setItem("theme", "dark");
-    toggleBtn.textContent = "☀️";
-  } else {
-    document.body.classList.remove("dark");
-    localStorage.setItem("theme", "light");
-    toggleBtn.textContent = "🌙";
-  }
+  const app = document.getElementById("app");
+  app.innerHTML = html;
+
+  // 🔥 WAIT for DOM update
+  setTimeout(() => {
+
+    // ✅ Re-run scripts properly
+    app.querySelectorAll("script").forEach(oldScript => {
+      const s = document.createElement("script");
+      if (oldScript.src) {
+        s.src = oldScript.src;
+      } else {
+        s.textContent = oldScript.textContent;
+      }
+      document.body.appendChild(s);
+    });
+
+    // 🔥 DARK MODE FIX (after content load)
+    const btn = document.getElementById("themeToggle");
+
+    function setTheme(mode) {
+      if (mode === "dark") {
+        document.body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+        btn.textContent = "☀️";
+      } else {
+        document.body.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+        btn.textContent = "🌙";
+      }
+    }
+
+    // load saved
+    const saved = localStorage.getItem("theme");
+    if (saved) setTheme(saved);
+
+    // click
+    btn.onclick = () => {
+      document.body.classList.contains("dark")
+        ? setTheme("light")
+        : setTheme("dark");
+    };
+
+  }, 100); // 💥 important delay
+
 }
 
-// Load saved theme
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme) setTheme(savedTheme);
-
-// Toggle click
-toggleBtn.addEventListener("click", () => {
-  document.body.classList.contains("dark")
-    ? setTheme("light")
-    : setTheme("dark");
-});
+loadApp();
 </script>
 
 </body>
-</html>    
+</html>
