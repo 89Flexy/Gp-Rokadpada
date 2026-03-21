@@ -5,96 +5,98 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GP Rokadpada</title>
 <style>
-  body { margin:0; font-family:sans-serif; transition:0.3s; }
-  body.dark { background:#222; color:#fff; }
-
-  /* Sidebar / Menu */
-  #sidebar { width:250px; background:#ccc; position:fixed; left:-250px; top:0; bottom:0; transition:0.3s; z-index:1000; padding:1em; }
-  #sidebar.active { left:0; }
-  #overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:none; z-index:500; }
-  #overlay.active { display:block; }
-
-  /* Search box */
-  #topSearch { display:none; position:fixed; top:0; left:0; right:0; padding:1em; background:#fff; z-index:1500; }
-  #topSearch.active { display:block; }
-  #topSearch input { width:80%; padding:0.5em; }
-  #topSearch button { padding:0.5em; }
+body{margin:0;font-family:sans-serif;transition:0.3s}body.dark{background:#222;color:#fff;}
+#sidebar{width:250px;background:#ccc;position:fixed;left:-250px;top:0;bottom:0;transition:.3s;z-index:1000;padding:1em;}
+#sidebar.active{left:0;}
+#overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:none;z-index:500;}
+#overlay.active{display:block;}
+#topSearch{display:none;position:fixed;top:0;left:0;right:0;padding:1em;background:#fff;z-index:1500;}
+#topSearch.active{display:block;}
+#topSearch input{width:80%;padding:.5em;}
+#topSearch button{padding:.5em;}
 </style>
 </head>
 <body>
 
 <div id="app"></div>
 
+<div id="overlay"></div> <!-- overlay outside app for delegation -->
+
 <script>
 async function loadMain() {
-  // 1️⃣ Load main.html dynamically
   const res = await fetch('main.html');
   const html = await res.text();
   document.getElementById('app').innerHTML = html;
 
-  // 2️⃣ Initialize Menu & Overlay
-  const menuBtn = document.getElementById("menuBtn");
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlay");
-  if(menuBtn && sidebar && overlay){
-    menuBtn.addEventListener("click", ()=>{
-      sidebar.classList.toggle("active");
-      overlay.classList.toggle("active");
-    });
-    overlay.addEventListener("click", ()=>{
-      sidebar.classList.remove("active");
-      overlay.classList.remove("active");
-    });
-  }
+  // ✅ Wait for elements dynamically
+  function $(id){ return document.getElementById(id); }
 
-  // 3️⃣ Initialize Search
-  const searchIcon = document.getElementById("searchIcon");
-  const topSearch = document.getElementById("topSearch");
-  const closeSearch = document.getElementById("closeSearch");
-  if(searchIcon && topSearch && closeSearch){
-    searchIcon.addEventListener("click", ()=> topSearch.classList.add("active"));
-    closeSearch.addEventListener("click", ()=> topSearch.classList.remove("active"));
-  }
+  const tryInit = () => {
+    const menuBtn = $('menuBtn');
+    const sidebar = $('sidebar');
+    const searchIcon = $('searchIcon');
+    const topSearch = $('topSearch');
+    const closeSearch = $('closeSearch');
+    const darkToggle = $('darkToggle');
 
-  // 4️⃣ Initialize Dark Mode
-  const darkToggle = document.getElementById("darkToggle");
-  if(darkToggle){
-    if(localStorage.getItem("mode")==="dark"){
-      document.body.classList.add("dark");
-      darkToggle.innerText = "☀️ Light Mode";
+    if(menuBtn && sidebar){
+      menuBtn.addEventListener("click", ()=>{
+        sidebar.classList.toggle("active");
+        $('overlay').classList.toggle("active");
+      });
+      $('overlay').addEventListener("click", ()=>{
+        sidebar.classList.remove("active");
+        $('overlay').classList.remove("active");
+      });
     }
-    darkToggle.addEventListener("click", ()=>{
-      document.body.classList.toggle("dark");
-      if(document.body.classList.contains("dark")){
-        localStorage.setItem("mode","dark");
-        darkToggle.innerText = "☀️ Light Mode";
-      } else {
-        localStorage.setItem("mode","light");
-        darkToggle.innerText = "🌙 Dark Mode";
-      }
-    });
-  }
 
-  // 5️⃣ Initialize Google Translate
-  window.googleTranslateElementInit = function() {
-    if(document.getElementById("google_translate_element")){
-      new google.translate.TranslateElement({pageLanguage: 'mr'}, 'google_translate_element');
+    if(searchIcon && topSearch && closeSearch){
+      searchIcon.addEventListener("click", ()=> topSearch.classList.add("active"));
+      closeSearch.addEventListener("click", ()=> topSearch.classList.remove("active"));
+    }
+
+    if(darkToggle){
+      if(localStorage.getItem("mode")==="dark"){
+        document.body.classList.add("dark");
+        darkToggle.innerText="☀️ Light Mode";
+      }
+      darkToggle.addEventListener("click", ()=>{
+        document.body.classList.toggle("dark");
+        if(document.body.classList.contains("dark")){
+          localStorage.setItem("mode","dark");
+          darkToggle.innerText="☀️ Light Mode";
+        } else {
+          localStorage.setItem("mode","light");
+          darkToggle.innerText="🌙 Dark Mode";
+        }
+      });
     }
   };
-  const gtScript = document.createElement("script");
-  gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+
+  // ⏱ Retry until elements exist (dynamic load)
+  const interval = setInterval(()=>{
+    if($('menuBtn') || $('sidebar') || $('searchIcon') || $('darkToggle')){
+      clearInterval(interval);
+      tryInit();
+    }
+  }, 100);
+
+  // Google Translate
+  window.googleTranslateElementInit=function(){
+    if($('google_translate_element')){
+      new google.translate.TranslateElement({pageLanguage:'mr'}, 'google_translate_element');
+    }
+  };
+  const gtScript=document.createElement("script");
+  gtScript.src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
   document.body.appendChild(gtScript);
 
-  // 6️⃣ Run any inline scripts inside main.html
-  const scripts = document.querySelectorAll("#app script");
-  scripts.forEach(oldScript => {
-    const newScript = document.createElement("script");
-    if(oldScript.src){
-      newScript.src = oldScript.src;
-    } else {
-      newScript.textContent = oldScript.textContent;
-    }
-    document.body.appendChild(newScript);
+  // Run any inline scripts from main.html
+  document.querySelectorAll("#app script").forEach(s=>{
+    const ns=document.createElement("script");
+    if(s.src) ns.src=s.src;
+    else ns.textContent=s.textContent;
+    document.body.appendChild(ns);
   });
 }
 
