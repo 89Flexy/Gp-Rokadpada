@@ -57,33 +57,6 @@ async function loadPage() {
 loadPage();
 </script>
 
-<script>
-fetch("main.html")
-.then(res => res.text())
-.then(data => {
-  const app = document.getElementById("app");
-  app.innerHTML = data;
-
-  // 🔥 FIX: run ALL scripts (inline + external)
-  const scripts = app.querySelectorAll("script");
-
-  scripts.forEach(oldScript => {
-    const newScript = document.createElement("script");
-
-    // copy attributes (IMPORTANT for external scripts)
-    [...oldScript.attributes].forEach(attr => {
-      newScript.setAttribute(attr.name, attr.value);
-    });
-
-    // inline script
-    if (oldScript.textContent) {
-      newScript.textContent = oldScript.textContent;
-    }
-
-    document.body.appendChild(newScript);
-  });
-});
-</script>
 
 </body>
 </html>
