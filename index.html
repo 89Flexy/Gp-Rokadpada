@@ -14,10 +14,6 @@
   #overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:none; z-index:500; }
   #overlay.active { display:block; }
 
-  /* Top bar */
-  #topBar { display:flex; justify-content:space-between; align-items:center; padding:1em; background:#eee; }
-  #topBar.dark { background:#333; color:#fff; }
-
   /* Search box */
   #topSearch { display:none; position:fixed; top:0; left:0; right:0; padding:1em; background:#fff; z-index:1500; }
   #topSearch.active { display:block; }
@@ -27,91 +23,82 @@
 </head>
 <body>
 
-<div id="app">
-  <!-- Top Bar -->
-  <div id="topBar">
-    <button id="menuBtn">☰ Menu</button>
-    <div>
-      <button id="searchIcon">🔍 Search</button>
-      <button id="darkToggle">🌙 Dark Mode</button>
-    </div>
-  </div>
-
-  <!-- Sidebar / Menu -->
-  <div id="sidebar">
-    <h2>Menu</h2>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </div>
-
-  <!-- Overlay -->
-  <div id="overlay"></div>
-
-  <!-- Search Box -->
-  <div id="topSearch">
-    <input type="text" placeholder="Search...">
-    <button id="closeSearch">Close</button>
-  </div>
-
-  <!-- Google Translate -->
-  <div id="google_translate_element"></div>
-
-  <!-- Page Content -->
-  <div>
-    <h1>Welcome to GP Rokadpada</h1>
-    <p>Your content goes here...</p>
-  </div>
-</div>
+<div id="app"></div>
 
 <script>
-  // MENU
+async function loadMain() {
+  // 1️⃣ Load main.html dynamically
+  const res = await fetch('main.html');
+  const html = await res.text();
+  document.getElementById('app').innerHTML = html;
+
+  // 2️⃣ Initialize Menu & Overlay
   const menuBtn = document.getElementById("menuBtn");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
-  menuBtn.addEventListener("click", ()=>{
-    sidebar.classList.toggle("active");
-    overlay.classList.toggle("active");
-  });
-  overlay.addEventListener("click", ()=>{
-    sidebar.classList.remove("active");
-    overlay.classList.remove("active");
-  });
+  if(menuBtn && sidebar && overlay){
+    menuBtn.addEventListener("click", ()=>{
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    });
+    overlay.addEventListener("click", ()=>{
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+  }
 
-  // SEARCH
+  // 3️⃣ Initialize Search
   const searchIcon = document.getElementById("searchIcon");
   const topSearch = document.getElementById("topSearch");
   const closeSearch = document.getElementById("closeSearch");
-  searchIcon.addEventListener("click", ()=> topSearch.classList.add("active"));
-  closeSearch.addEventListener("click", ()=> topSearch.classList.remove("active"));
-
-  // DARK MODE
-  const darkToggle = document.getElementById("darkToggle");
-  if(localStorage.getItem("mode")==="dark"){
-    document.body.classList.add("dark");
-    darkToggle.innerText = "☀️ Light Mode";
+  if(searchIcon && topSearch && closeSearch){
+    searchIcon.addEventListener("click", ()=> topSearch.classList.add("active"));
+    closeSearch.addEventListener("click", ()=> topSearch.classList.remove("active"));
   }
-  darkToggle.addEventListener("click", ()=>{
-    document.body.classList.toggle("dark");
-    if(document.body.classList.contains("dark")){
-      localStorage.setItem("mode","dark");
-      darkToggle.innerText = "☀️ Light Mode";
-    } else {
-      localStorage.setItem("mode","light");
-      darkToggle.innerText = "🌙 Dark Mode";
-    }
-  });
 
-  // GOOGLE TRANSLATE
+  // 4️⃣ Initialize Dark Mode
+  const darkToggle = document.getElementById("darkToggle");
+  if(darkToggle){
+    if(localStorage.getItem("mode")==="dark"){
+      document.body.classList.add("dark");
+      darkToggle.innerText = "☀️ Light Mode";
+    }
+    darkToggle.addEventListener("click", ()=>{
+      document.body.classList.toggle("dark");
+      if(document.body.classList.contains("dark")){
+        localStorage.setItem("mode","dark");
+        darkToggle.innerText = "☀️ Light Mode";
+      } else {
+        localStorage.setItem("mode","light");
+        darkToggle.innerText = "🌙 Dark Mode";
+      }
+    });
+  }
+
+  // 5️⃣ Initialize Google Translate
   window.googleTranslateElementInit = function() {
-    new google.translate.TranslateElement({pageLanguage: 'mr'}, 'google_translate_element');
+    if(document.getElementById("google_translate_element")){
+      new google.translate.TranslateElement({pageLanguage: 'mr'}, 'google_translate_element');
+    }
   };
   const gtScript = document.createElement("script");
   gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
   document.body.appendChild(gtScript);
-</script>
 
+  // 6️⃣ Run any inline scripts inside main.html
+  const scripts = document.querySelectorAll("#app script");
+  scripts.forEach(oldScript => {
+    const newScript = document.createElement("script");
+    if(oldScript.src){
+      newScript.src = oldScript.src;
+    } else {
+      newScript.textContent = oldScript.textContent;
+    }
+    document.body.appendChild(newScript);
+  });
+}
+
+loadMain();
+</script>
 </body>
 </html>
